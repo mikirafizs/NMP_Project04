@@ -1,16 +1,19 @@
 #include <iostream>
 #include <vector>
+#include <cmath>
 #include "sparse.hpp"
 
 
 const size_t n = 500;
 const double delta = 1;
 const int itmax = 10000;
-const  double epsilon = 10e-15;
-const double omega = 1;
+const  double epsilon = 1e-15;
+double omega = 1;
 
 
 int main(){
+    std::cout<<"Enter omega value: ";
+    std::cin>>omega;
     std::vector <double> rho = rho_population(n);
     std::vector <double> v (n, 1);
 
@@ -30,17 +33,18 @@ int main(){
 
 
     double norm = 0.0;
+    std::vector <double> y (n);
     int k = 0;
     do{
         k++;
         SOR(d, rho, v, omega, a, col, row);
-        std::vector <double> y;
         matvec(v, y, a, col, row, n);
         for(std::size_t i = 0; i < n; i++){
             r[i] = rho[i]-y[i];
         }
-
-        
+        norm = sqrt(vdot(r,r));
+        if(k%1000==0)
+        std::cout<<"iteration: "<<k<<" norm v: "<<sqrt(vdot(v,v))<<" norm r: "<<norm<<"\n";
     } while (k<itmax && norm > epsilon);
     
     return 0;
