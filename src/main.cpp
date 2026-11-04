@@ -11,14 +11,19 @@ const size_t n = 500;
 const double delta = 1;
 const int itmax = 10000;
 const  double epsilon = 1e-15;
-double omega = 1;
+double omega;
 
 
 int main(){
     std::cout<<"Enter omega value: ";
     std::cin>>omega;
     std::vector <double> rho = rho_population(n);
-    std::vector <double> v (n, 1);
+    std::vector <double> v (n, 0.0);
+    /*for (size_t i = 0; i < n; i++)
+    {
+        v[i] = 100*(double)rand()/RAND_MAX;
+    }*/
+    
 
     size_t nnz_max = 3*n;
 
@@ -45,6 +50,13 @@ int main(){
         std::cerr << "Cannot open " << name.str() << "\n";
         return 1;
     }
+    
+    /*std::ofstream solution;
+    solution.open("../data/random_vec_sol.csv");
+    if(!solution.is_open()){
+        std::cerr << "Cannot open \n";
+        return 1;
+    }*/
     do{
         k++;
         SOR(d, rho, v, omega, a, col, row);
@@ -53,9 +65,19 @@ int main(){
             r[i] = rho[i]-y[i];
         }
         norm = sqrt(vdot(r,r));
-
-        solution<<k<<","<<sqrt(vdot(v,v))<<","<<norm<<"\n";
+        
+        solution << k << "," << sqrt(vdot(v,v)) << "," << norm << "\n";
     } while (k<itmax && norm > epsilon);
     
+    std::ostringstream name2;
+    name2 << "../data/vector_omega_" << omega << ".csv";
+    std::ofstream vec(name2.str());
+    if(!vec.is_open()){
+        std::cerr << "Cannot open " << name2.str() << "\n";
+        return 1;
+    }
+    for(size_t i = 0; i < n; i++)
+    vec << i*delta << "," << rho[i] << "," << v[i] << "\n";
+
     return 0;
 }
