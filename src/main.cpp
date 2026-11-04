@@ -2,6 +2,9 @@
 #include <vector>
 #include <cmath>
 #include "sparse.hpp"
+#include <fstream>
+#include <sstream>
+#include <string>
 
 
 const size_t n = 500;
@@ -35,6 +38,13 @@ int main(){
     double norm = 0.0;
     std::vector <double> y (n);
     int k = 0;
+    std::ostringstream name;
+    name << "../data/sor_omega_"<<omega<<".csv";
+    std::ofstream solution(name.str());
+    if(!solution.is_open()){
+        std::cerr << "Cannot open " << name.str() << "\n";
+        return 1;
+    }
     do{
         k++;
         SOR(d, rho, v, omega, a, col, row);
@@ -43,8 +53,8 @@ int main(){
             r[i] = rho[i]-y[i];
         }
         norm = sqrt(vdot(r,r));
-        if(k%1000==0)
-        std::cout<<"iteration: "<<k<<" norm v: "<<sqrt(vdot(v,v))<<" norm r: "<<norm<<"\n";
+
+        solution<<k<<","<<sqrt(vdot(v,v))<<","<<norm<<"\n";
     } while (k<itmax && norm > epsilon);
     
     return 0;
