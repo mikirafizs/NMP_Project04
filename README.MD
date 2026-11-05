@@ -1,4 +1,4 @@
-# Diagonalization of symmetric tridiagonal matrix (quantum harmonic oscillator problem).
+# Solving (sparse) system of linear equations (SLE) with successive overrelaxation method (SOR)
 
 The key concept of this project is to solve Poisson equation numerically with the method of successive overrelaxation. To obtain a symmetric tridiagonal matrix we discretize the equation and replace the second derivative with three-term finite difference formula. In project we compare the convergences of solutions for different omega values.
 
