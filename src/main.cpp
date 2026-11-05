@@ -18,7 +18,7 @@ int main(){
     std::cout<<"Enter omega value: ";
     std::cin>>omega;
     std::vector <double> rho = rho_population(n);
-    std::vector <double> v (n, 0.0);
+    std::vector <double> v (n, 1.0);
     /*for (size_t i = 0; i < n; i++)
     {
         v[i] = 100*(double)rand()/RAND_MAX;
